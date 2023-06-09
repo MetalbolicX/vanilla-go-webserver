@@ -33,4 +33,5 @@ func main() {
 func bindRoutes(s *server.Server) {
 	s.Handle(http.MethodGet, "/", handlers.IndexHandler)
 	s.Handle(http.MethodGet, "/exercises", handlers.GetExercisesHandler)
+	s.Handle(http.MethodGet, "/home", handlers.HomeHandler)
 }
