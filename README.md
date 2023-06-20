@@ -42,7 +42,7 @@ go get github.com/joho/godotenv
 go build
 ```
 7. Start the server with the `.exe` file created by the `go build` command.
-6. Access the server in your browser: [http://localhost:3000](http://localhost:3000) or change the **port** in the `.env` file.
+6. Access the server in your browser: `http://localhost:3000` or change the **port** in the `.env` file.
 
 ## Directory structure
 
