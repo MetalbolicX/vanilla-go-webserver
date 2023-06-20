@@ -4,11 +4,10 @@ By José Martínez Santana
 
 ## Technologies used
 
-<html>
-  <div align="center">
-	  <a href="https://go.dev/" target="_blank" rel="noreferrer"><img  alt="Golang" height="50px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg"/></a>
-  </div>
-</html>
+
+<p align="center">
+	<a href="https://go.dev/" target="_blank" rel="noreferrer"><img  alt="Golang" height="50px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg"/></a>
+</p>
 
 ## Description
 
@@ -20,7 +19,7 @@ A web server build with the standard library. Created for personal or small proj
 - [x] Lightweight and efficient web server implementation using **Go's standard library**.
 - [x] Enables easy development of custom APIs for personal projects or any small project.
 - [x] Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
-- [x] Supports the routing with regular expression validation.
+- [x] Supports the routing with regular expressions validation.
 
 # Usage
 
