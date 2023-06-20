@@ -9,10 +9,22 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// The relationalDBRepo represents a repository
+// implementation for a relational database. It has a
+// field db of type *sql.DB, which represents the
+// connection to the database.
 type relationalDBRepo struct {
 	db *sql.DB
 }
 
+// The NewRelationalDBRepo function creates a new instance
+// of the relationalDBRepo struct. It takes the database
+// management system (e.g., MySQL, PostgreSQL) and the
+// database connection URL as parameters. It uses sql.Open
+// to establish a connection to the database.
+// If an error occurs during the connection process,
+// it returns nil and the error. Otherwise, it returns
+// a pointer to the created relationalDBRepo instance.
 func NewRelationalDBRepo(dbManagementSystem, url string) (*relationalDBRepo, error) {
 	db, err := sql.Open(dbManagementSystem, url)
 	if err != nil {
@@ -21,10 +33,22 @@ func NewRelationalDBRepo(dbManagementSystem, url string) (*relationalDBRepo, err
 	return &relationalDBRepo{db}, nil
 }
 
+// The Close method is part of the Repository interface
+// implementation. It closes the underlying database
+// connection by invoking the Close method of the sql.DB
+// struct.
 func (d *relationalDBRepo) Close() error {
 	return d.db.Close()
 }
 
+// The ExecuteCommand method is part of the Repository
+// interface implementation. It executes a database query
+// with the provided query string and arguments.
+// It uses QueryContext to execute the query and retrieve
+// the resulting rows. It then scans the rows and maps
+// the column values to a slice of maps. Each map
+// represents a row, with the column names as keys and
+// the corresponding values.
 func (d *relationalDBRepo) ExecuteCommand(ctx context.Context, query string, args ...any) ([]map[string]any, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -74,6 +98,12 @@ func (d *relationalDBRepo) ExecuteCommand(ctx context.Context, query string, arg
 	return result, nil
 }
 
+// The Post method inserts data into the database using
+// the provided query and arguments. It creates a new
+// context with a timeout of 5 seconds. It then calls
+// ExecContext on the underlying sql.DB object to execute
+// the query. If an error occurs, it is returned.
+// Otherwise, it returns nil to indicate success.
 func (d *relationalDBRepo) Post(ctx context.Context, query string, args ...any) error {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -86,10 +116,21 @@ func (d *relationalDBRepo) Post(ctx context.Context, query string, args ...any) 
 	return nil
 }
 
+// The Get method retrieves data from the database
+// using the provided query and arguments. It simply calls
+// the ExecuteCommand method, which executes the query
+// and returns the result as a slice of maps representing
+// the rows.
 func (d *relationalDBRepo) Get(ctx context.Context, query string, args ...any) ([]map[string]any, error) {
 	return d.ExecuteCommand(ctx, query, args...)
 }
 
+// The Put method updates data in the database using the
+// provided query and arguments. It follows a similar
+// pattern as the Post method, but additionally retrieves
+// the number of rows affected by the update operation.
+// It returns the number of affected rows and any error
+// that occurred during execution.
 func (d *relationalDBRepo) Put(ctx context.Context, query string, args ...any) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -107,6 +148,11 @@ func (d *relationalDBRepo) Put(ctx context.Context, query string, args ...any) (
 	return rowsAffected, nil
 }
 
+// The Delete method removes data from the database using
+// the provided query and arguments. It follows a similar
+// pattern as the Put method, returning the number of
+// affected rows and any error that occurred during
+// execution.
 func (d *relationalDBRepo) Delete(ctx context.Context, query string, args ...any) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()

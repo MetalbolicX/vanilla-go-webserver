@@ -30,9 +30,18 @@ func main() {
 
 }
 
+// The bindRoutes function is responsible for binding
+// the routes (URL paths) to their corresponding handler
+// functions in the server.Server instance s.
+// It sets up the routing configuration for
+// various HTTP methods (GET, POST, PUT)
+// and associates each route with its respective handler function.
 func bindRoutes(s *server.Server) {
 	s.Handle(http.MethodGet, "/", handlers.IndexHandler)
 	s.Handle(http.MethodGet, "/exercises", handlers.GetExercisesHandler)
 	s.Handle(http.MethodGet, "/home", handlers.HomeHandler)
-	s.Handle(http.MethodPost, "/user", handlers.NewCustomerHandler)
+	s.Handle(http.MethodPost, "/customer", handlers.NewCustomerHandler)
+	s.Handle(http.MethodGet, "/customer/\\d+", handlers.GetCustomerByIdHandler)
+	s.Handle(http.MethodPut, "/customer/\\d+", handlers.UpdateCustomerHandler)
+	s.Handle(http.MethodDelete, "/customer/\\d+", handlers.DeleteCustomerHandler)
 }
