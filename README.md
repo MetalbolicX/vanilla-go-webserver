@@ -6,20 +6,20 @@ By José Martínez Santana
 
 <html>
   <div align="center">
-	  <a href="https://go.dev/" target="_blank" rel="noreferrer"><img  alt="Golang" height="50px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg"/></a>
+	  <a href="https://go.dev/" target="_blank" rel="noreferrer"><img  alt="Golang" height="50px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg"/></a>
   </div>
 </html>
 
 ## Description
 
-A web server build with the standard library. Created for personal API development and static file sharing.
+A web server build with the standard library. Created for personal or small project API development and static file sharing.
 
 ## Features
 
-- Lightweight and efficient web server implementation using **Go's standard library**.
-- Enables easy development of custom APIs for personal projects.
-- Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
-- Easily extensible and customizable to suit your specific requirements.
+- [x] Crete, Read, Update, and Delete (**CRUD**) methods to interact with a database.
+- [x] Lightweight and efficient web server implementation using **Go's standard library**.
+- [x] Enables easy development of custom APIs for personal projects or any small project.
+- [x] Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
 
 # Usage
 
@@ -32,11 +32,16 @@ git clone https://github.com/MetalbolicX/vanilla-go-webserver.git
 ```Bash
 cd your-project-directory
 ```
-4. Build the server:
+4. Get the dependency for the `.env` file from:
+```Bash
+go get github.com/joho/godotenv
+```
+5. Change the variables of the `.env` file.
+6. Build the server:
 ```Bash
 go build
 ```
-5. Start the server with the `.exe` file created by the `go build` command.
+7. Start the server with the `.exe` file created by the `go build` command.
 6. Access the server in your browser: [http://localhost:3000](http://localhost:3000) or change the **port** in the `.env` file.
 
 ## Directory structure
@@ -68,8 +73,10 @@ The folders structures of the project are described in the following image:
 │   │   └── styles.css
 │   └── js
 │       └── test.js
-└── templates <- HTML folder for templates.
-    └── index.html
+├── templates <- Folder for HTML templates files.
+│   └── index.html
+└── utils
+    └── endpoint-identifier.go
 ```
 
 For custom changes I suggest just to modify or add the next folders:
