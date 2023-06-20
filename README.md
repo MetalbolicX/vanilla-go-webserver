@@ -20,6 +20,7 @@ A web server build with the standard library. Created for personal or small proj
 - [x] Lightweight and efficient web server implementation using **Go's standard library**.
 - [x] Enables easy development of custom APIs for personal projects or any small project.
 - [x] Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
+- [x] Supports the routing with regular expression validation.
 
 # Usage
 
