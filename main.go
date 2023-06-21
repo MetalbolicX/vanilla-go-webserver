@@ -6,13 +6,14 @@ import (
 	"os"
 
 	"github.com/MetalbolicX/vanilla-go-webserver/handlers"
+	"github.com/MetalbolicX/vanilla-go-webserver/middlewares"
 	"github.com/MetalbolicX/vanilla-go-webserver/server"
-	"github.com/joho/godotenv"
+	"github.com/MetalbolicX/vanilla-go-webserver/utils"
 )
 
 func main() {
 
-	if err := godotenv.Load(".env"); err != nil {
+	if err := utils.LoaderEnvFile(".env"); err != nil {
 		log.Fatal("Error loading .env file")
 	}
 	PORT := os.Getenv("SERVER_PORT")
@@ -41,5 +42,7 @@ func bindRoutes(s *server.Server) {
 	s.Handle(http.MethodPost, "/customer", handlers.NewCustomerHandler)
 	s.Handle(http.MethodGet, "/customer/\\d+", handlers.GetCustomerByIdHandler)
 	s.Handle(http.MethodPut, "/customer/\\d+", handlers.UpdateCustomerHandler)
-	s.Handle(http.MethodDelete, "/customer/\\d+", handlers.DeleteCustomerHandler)
+	s.Handle(http.MethodDelete, "/customer/\\d+",
+		s.AddMiddleware(handlers.DeleteCustomerHandler,
+			middlewares.CheckAuth(), middlewares.Logging()))
 }

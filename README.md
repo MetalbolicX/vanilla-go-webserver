@@ -20,6 +20,8 @@ A web server build with the standard library. Created for personal or small proj
 - [x] Enables easy development of custom APIs for personal projects or any small project.
 - [x] Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
 - [x] Supports the routing with regular expressions validation.
+- [x] Capability to add middlewares.
+- [x] Supports to load simple `.env` file without external libraries.
 
 # Usage
 
@@ -32,17 +34,13 @@ git clone https://github.com/MetalbolicX/vanilla-go-webserver.git
 ```Bash
 cd your-project-directory
 ```
-4. Get the dependency for the `.env` file from:
-```Bash
-go get github.com/joho/godotenv
-```
-5. Change the variables of the `.env` file.
-6. Build the server:
+4. Change the variables of the `.env` file.
+5. Build the server:
 ```Bash
 go build
 ```
-7. Start the server with the `.exe` file created by the `go build` command.
-6. Access the server in your browser: `http://localhost:3000` or change the **port** in the `.env` file.
+6. Start the server with the `.exe` file created by the `go build` command.
+7. Access the server in your browser: `http://localhost:3000` or change the **port** in the `.env` file.
 
 ## Directory structure
 
@@ -57,10 +55,14 @@ The folders structures of the project are described in the following image:
 ├── go.mod
 ├── go.sum
 ├── handlers
+│   ├── customers.go
 │   ├── handlers.go
 │   ├── home.go
 │   └── pages.go
 ├── main.go
+├── middlewares
+│   ├── checkauthentication.go
+│   └── logging.go
 ├── models
 │   └── types.go
 ├── repository
@@ -68,21 +70,25 @@ The folders structures of the project are described in the following image:
 ├── server
 │   ├── router.go
 │   └── server.go
-├── static <- Folder to serve the static files for a web page.
+├── static
 │   ├── css
 │   │   └── styles.css
 │   └── js
 │       └── test.js
-├── templates <- Folder for HTML templates files.
+├── templates
 │   └── index.html
+├── types
+│   └── types.go
 └── utils
-    └── endpoint-identifier.go
+    ├── endpoint-identifier.go
+    └── envfile-loader.go
 ```
 
 For custom changes I suggest just to modify or add the next folders:
 
 1. database.
 2. handlers.
+3. middlewares.
 
 To better understanding, let's see an example.
 
@@ -109,8 +115,11 @@ type relationalDBRepo struct {
 }
 ```
 2. In `.env` file change:
-* `DB_MANAGEMENT_SYSTEM=sqlite3` for `DB_MANAGEMENT_SYSTEM=postgres`.
-* `DB_URL=./data/external/exercises.db` for `DATABASE_URL=postgres://postgres:postgres@localhost:54321/postgres?sslmode=disable` (Check the documentation for the correct implementation of the connection string).
+
+|Before|After|
+|:---|:---|
+|`DB_MANAGEMENT_SYSTEM=sqlite3`|`DB_MANAGEMENT_SYSTEM=postgres`|
+|`DB_URL=./data/external/exercises.db`|`DATABASE_URL=postgres://postgres:postgres@localhost:54321/postgres?sslmode=disable` (Check the documentation for the correct implementation of the connection string)|
 
 <ins>NOTE</ins>: If somebody wants to add a `NoSQL` database create another file (Ex. `mongodb.go`) and add the logic to interact with the database.
 
@@ -143,6 +152,35 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 ```Go
 func bindRoutes(s *server.Server) {
 	s.Handle(http.MethodGet, "/home", handlers.HomeHandler)
+}
+```
+
+### Middleware addition
+
+1. In the `middlewares` folders add a new file.
+2. In the new file add the logic of the code. For example:
+```Go
+package middlewares
+
+import (
+	"github.com/MetalbolicX/vanilla-go-webserver/types"
+)
+
+func Example() types.Middleware {
+	return func(handlerLogic http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			// Add the logic ...
+	}
+}
+```
+3. Add the middleware in the `main.go`. For example:
+```Go
+func bindRoutes(s *server.Server) {
+	s.Handle(http.MethodDelete, "/customer/\\d+",
+		s.AddMiddleware(handlers.DeleteCustomerHandler,
+			middlewares.CheckAuth(),
+			middlewares.Logging(),
+			middlewares.Example()))
 }
 ```
 

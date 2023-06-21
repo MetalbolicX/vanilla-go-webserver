@@ -7,6 +7,7 @@ import (
 
 	"github.com/MetalbolicX/vanilla-go-webserver/database"
 	"github.com/MetalbolicX/vanilla-go-webserver/repository"
+	"github.com/MetalbolicX/vanilla-go-webserver/types"
 )
 
 // The Server struct represents the server configuration.
@@ -97,4 +98,19 @@ func (s *Server) setupStaticFileServer() {
 		folder := fmt.Sprintf("/%s/", s.staticFolder)
 		http.Handle(folder, http.StripPrefix(folder, fs))
 	}
+}
+
+// The function applies the provided middlewares to the
+// handler logic in a sequential manner and returns the
+// resulting handler function is then used for routing
+// or serving HTTP requests. When a request is received,
+// the middlewares will be executed in the order they
+// were added, allowing you to perform additional
+// operations before and after calling the original
+// handler logic.
+func (s *Server) AddMiddleware(handlerLogic http.HandlerFunc, middlewares ...types.Middleware) http.HandlerFunc {
+	for _, middleware := range middlewares {
+		handlerLogic = middleware(handlerLogic)
+	}
+	return handlerLogic
 }
