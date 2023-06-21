@@ -52,6 +52,8 @@ The folders structures of the project are described in the following image:
 ├── go.mod
 ├── go.sum
 ├── internal
+│   ├── db
+│   │   └── relational-database.go
 │   ├── handlers
 │   │   ├── customers.go
 │   │   ├── handlers.go
@@ -63,8 +65,6 @@ The folders structures of the project are described in the following image:
 │   └── models
 ├── main.go
 ├── pkg
-│   ├── database
-│   │   └── relational-database.go
 │   ├── repository
 │   │   └── repository.go
 │   ├── server
@@ -84,7 +84,14 @@ The folders structures of the project are described in the following image:
     └── index.html
 ```
 
-To implement the logic of your project go to the `internal` folder. Inside it, the user can add the <ins>handlers, middlewares, models and db</ins>. For better understanding, let's see an example.
+To implement the logic of your project go to the `internal` folder. Inside it, the user can add the logic in the folders of:
+
+1. `handlers`.
+2. `middlewares`.
+3. `models`.
+4. `db`.
+
+For better understanding, let's see an example.
 
 ### Handlers addition
 
