@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/types"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/types"
 )
 
 // The Logging logs the duration of each HTTP request.

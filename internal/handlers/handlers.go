@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/repository"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/repository"
 )
 
 func GetExercisesHandler(w http.ResponseWriter, r *http.Request) {

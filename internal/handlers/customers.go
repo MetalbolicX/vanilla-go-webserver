@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/repository"
-	"github.com/MetalbolicX/vanilla-go-webserver/utils"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/repository"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/utils"
 )
 
 type customerRequest struct {

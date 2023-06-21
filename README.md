@@ -19,8 +19,7 @@ A web server build with the standard library. Created for personal or small proj
 - [x] Lightweight and efficient web server implementation using **Go's standard library**.
 - [x] Enables easy development of custom APIs for personal projects or any small project.
 - [x] Supports serving static files for sharing static content like `HTML`, `CSS`, `JavaScript`, etc.
-- [x] Supports the routing with regular expressions validation.
-- [x] Capability to add middlewares.
+- [x] Supports the **routing with regular expressions** validation.
 - [x] Supports to load simple `.env` file without external libraries.
 
 # Usage
@@ -34,7 +33,7 @@ git clone https://github.com/MetalbolicX/vanilla-go-webserver.git
 ```Bash
 cd your-project-directory
 ```
-4. Change the variables of the `.env` file.
+4. Change the variables of the `.env` file in order to make the database connection.
 5. Build the server:
 ```Bash
 go build
@@ -50,78 +49,42 @@ The folders structures of the project are described in the following image:
 ├── data
 │   ├── external
 │   │   └── exercises.db
-├── database
-│   └── relational-database.go
 ├── go.mod
 ├── go.sum
-├── handlers
-│   ├── customers.go
-│   ├── handlers.go
-│   ├── home.go
-│   └── pages.go
+├── internal
+│   ├── handlers
+│   │   ├── customers.go
+│   │   ├── handlers.go
+│   │   ├── home.go
+│   │   └── pages.go
+│   ├── middlewares
+│   │   ├── checkauthentication.go
+│   │   └── logging.go
+│   └── models
 ├── main.go
-├── middlewares
-│   ├── checkauthentication.go
-│   └── logging.go
-├── models
-│   └── types.go
-├── repository
-│   └── repository.go
-├── server
-│   ├── router.go
-│   └── server.go
+├── pkg
+│   ├── database
+│   │   └── relational-database.go
+│   ├── repository
+│   │   └── repository.go
+│   ├── server
+│   │   ├── router.go
+│   │   └── server.go
+│   ├── types
+│   │   └── types.go
+│   └── utils
+│       ├── endpoint-identifier.go
+│       └── envfile-loader.go
 ├── static
 │   ├── css
 │   │   └── styles.css
 │   └── js
 │       └── test.js
-├── templates
-│   └── index.html
-├── types
-│   └── types.go
-└── utils
-    ├── endpoint-identifier.go
-    └── envfile-loader.go
+└── templates
+    └── index.html
 ```
 
-For custom changes I suggest just to modify or add the next folders:
-
-1. database.
-2. handlers.
-3. middlewares.
-
-To better understanding, let's see an example.
-
-### Change the database
-
-The current database is a [SQLite3](https://www.sqlite.org/index.html), now it is necessary to scale to a [PostgresSQL](https://www.postgresql.org/) database.
-
-1. In the file `relational-database.go` change the following lines:
-```Go
-package database
-
-import (
-	"context"
-	"database/sql"
-	"log"
-	"time"
-
-  // Erase this line
-	// _ "github.com/mattn/go-sqlite3"
-)
-
-type relationalDBRepo struct {
-	db *sql.DB
-}
-```
-2. In `.env` file change:
-
-|Before|After|
-|:---|:---|
-|`DB_MANAGEMENT_SYSTEM=sqlite3`|`DB_MANAGEMENT_SYSTEM=postgres`|
-|`DB_URL=./data/external/exercises.db`|`DATABASE_URL=postgres://postgres:postgres@localhost:54321/postgres?sslmode=disable` (Check the documentation for the correct implementation of the connection string)|
-
-<ins>NOTE</ins>: If somebody wants to add a `NoSQL` database create another file (Ex. `mongodb.go`) and add the logic to interact with the database.
+To implement the logic of your project go to the `internal` folder. Inside it, the user can add the <ins>handlers, middlewares, models and db</ins>. For better understanding, let's see an example.
 
 ### Handlers addition
 
@@ -183,6 +146,37 @@ func bindRoutes(s *server.Server) {
 			middlewares.Example()))
 }
 ```
+
+### Change the database
+
+The current database is a [SQLite3](https://www.sqlite.org/index.html), now it is necessary to scale to a [PostgresSQL](https://www.postgresql.org/) database.
+
+1. In the file `relational-database.go` change the following lines:
+```Go
+package db
+
+import (
+	"context"
+	"database/sql"
+	"log"
+	"time"
+
+  // Erase this line
+	// _ "github.com/mattn/go-sqlite3"
+)
+
+type relationalDBRepo struct {
+	db *sql.DB
+}
+```
+2. In `.env` file change:
+
+|Before|After|
+|:---|:---|
+|`DB_MANAGEMENT_SYSTEM=sqlite3`|`DB_MANAGEMENT_SYSTEM=postgres`|
+|`DB_URL=./data/external/exercises.db`|`DATABASE_URL=postgres://postgres:postgres@localhost:54321/postgres?sslmode=disable` (Check the documentation for the correct implementation of the connection string.)|
+
+<ins>NOTE</ins>: If somebody wants to add a `NoSQL` database create another file (Ex. `mongodb.go`) in the `internal/db` folder and add the logic to interact with the database.
 
 # Contributing
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/repository"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/repository"
 )
 
 const tmpFolder string = "tmp"

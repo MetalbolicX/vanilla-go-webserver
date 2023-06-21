@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/database"
-	"github.com/MetalbolicX/vanilla-go-webserver/repository"
-	"github.com/MetalbolicX/vanilla-go-webserver/types"
+	"github.com/MetalbolicX/vanilla-go-webserver/internal/db"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/repository"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/types"
 )
 
 // The Server struct represents the server configuration.
@@ -68,7 +68,7 @@ func (s *Server) Handle(method, path string, handlerLogic http.HandlerFunc) {
 // and it logs the server's listening port.
 func (s *Server) Listen(dbManagmentSystem, dbUrl string) error {
 
-	repo, err := database.NewRelationalDBRepo(dbManagmentSystem, dbUrl)
+	repo, err := db.NewRelationalDBRepo(dbManagmentSystem, dbUrl)
 	if err != nil {
 		log.Fatal(err)
 	}

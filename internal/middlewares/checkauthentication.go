@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/types"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/types"
 )
 
 //	The CheckAuth performs authentication checks.If

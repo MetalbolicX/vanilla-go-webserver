@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/MetalbolicX/vanilla-go-webserver/handlers"
-	"github.com/MetalbolicX/vanilla-go-webserver/middlewares"
-	"github.com/MetalbolicX/vanilla-go-webserver/server"
-	"github.com/MetalbolicX/vanilla-go-webserver/utils"
+	"github.com/MetalbolicX/vanilla-go-webserver/internal/handlers"
+	"github.com/MetalbolicX/vanilla-go-webserver/internal/middlewares"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/server"
+	"github.com/MetalbolicX/vanilla-go-webserver/pkg/utils"
 )
 
 func main() {
