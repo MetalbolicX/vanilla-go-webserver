@@ -39,8 +39,7 @@ func NewRouter() *router {
 func (rt *router) FindHandler(method, path string) (http.HandlerFunc, bool, bool) {
 	_, methodExists := rt.rules[method]
 	for route, handlerLogic := range rt.rules[method] {
-		pathExists, _ := regexp.MatchString("^"+route+"$", path)
-		if pathExists {
+		if pathExists, _ := regexp.MatchString("^"+route+"$", path); pathExists {
 			return handlerLogic, methodExists, pathExists
 		}
 	}

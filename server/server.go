@@ -46,8 +46,7 @@ func (s *Server) String() string {
 // It then assigns the provided handler function to
 // the specified method and path.
 func (s *Server) Handle(method, path string, handlerLogic http.HandlerFunc) {
-	_, methodExists := s.router.rules[method]
-	if !methodExists {
+	if _, methodExists := s.router.rules[method]; !methodExists {
 		s.router.rules[method] = make(map[string]http.HandlerFunc)
 	}
 	s.router.rules[method][path] = handlerLogic

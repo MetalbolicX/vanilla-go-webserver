@@ -26,19 +26,18 @@ type customerResponse struct {
 // For example:
 // curl -X POST -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "johndoe@example.com"}' http://localhost:3000/customer
 func NewCustomerHandler(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body into a User struct
-	var user customerRequest
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
+	// Parse the request body into a customerRequest struct
+	var customer customerRequest
+	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
 	// Insert the user into the database
-	err = repository.Post(r.Context(), `
+	err := repository.Post(r.Context(), `
 		INSERT INTO customers (name, email)
 		VALUES ($1, $2)`,
-		user.Name, user.Email)
+		customer.Name, customer.Email)
 	if err != nil {
 		http.Error(w, "Failed to insert user", http.StatusInternalServerError)
 		log.Println(err)
@@ -121,7 +120,8 @@ func UpdateCustomerHandler(w http.ResponseWriter, r *http.Request) {
 	// Update the user in the database
 	rowsUpdated, err := repository.Put(r.Context(), `
 		UPDATE customers
-		SET name = $1, email = $2
+		SET name = $1
+			, email = $2
 		WHERE id = $3
 	`, customer.Name, customer.Email, &customer.ID)
 	if err != nil {
@@ -151,7 +151,7 @@ func DeleteCustomerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rowsDeleted, err := repository.Put(r.Context(),
+	rowsDeleted, err := repository.Delete(r.Context(),
 		"DELETE FROM customers WHERE id = $1",
 		customerId)
 	if err != nil {
