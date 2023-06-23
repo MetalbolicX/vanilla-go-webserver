@@ -225,7 +225,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 3. Add the the new page handler route to the server in the `binder.go` file of the `internal/routes` folder in the `BindRoutes` function.
 ```Go
 func BindRoutes(s *server.Server) {
-	s.Handle(http.MethodGet, "/about", handlers.AboutHandler)
+	s.Handle(http.MethodGet, "/about", pages.AboutHandler)
 }
 ```
 
