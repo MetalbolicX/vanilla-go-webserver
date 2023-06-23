@@ -14,13 +14,13 @@ import (
 // function completes. The URL path and duration are
 // then logged using the log.Println function.
 func Logging() types.Middleware {
-	return func(handlerLogic http.HandlerFunc) http.HandlerFunc {
+	return func(nextHandler http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
 			defer func() {
 				log.Println(r.URL.Path, time.Since(start))
 			}()
-			handlerLogic(w, r)
+			nextHandler(w, r)
 		}
 	}
 }

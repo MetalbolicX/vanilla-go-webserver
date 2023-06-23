@@ -46,6 +46,7 @@ func NewCustomerHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return a success response
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(customerResponse{
 		Message: "Created successfully",
@@ -88,6 +89,7 @@ func GetCustomerByIdHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	w.Write(customerJSON)
 }
@@ -132,6 +134,7 @@ func UpdateCustomerHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return a success response
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(customerResponse{
 		Message: fmt.Sprintf("%d customer updated successfully", rowsUpdated),
@@ -162,6 +165,7 @@ func DeleteCustomerHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return a success response
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(customerResponse{
 		Message: fmt.Sprintf("%d customer deleted successfully", rowsDeleted),

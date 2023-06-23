@@ -15,14 +15,14 @@ import (
 // it allows the execution to continue to the
 // subsequent handler function.
 func CheckAuth() types.Middleware {
-	return func(handlerLogic http.HandlerFunc) http.HandlerFunc {
+	return func(nextHandler http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			flag := true
 			if !flag {
 				fmt.Println("Unauthorized")
 				return
 			}
-			handlerLogic(w, r)
+			nextHandler(w, r)
 		}
 	}
 }
