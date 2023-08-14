@@ -28,9 +28,15 @@ func main() {
 	app := config.NewAppConfig(tmplCache, false)
 	render.NewTemplates(app)
 
-	server := server.NewServer(PORT, STATIC_FOLDER)
+	server := server.NewServer(PORT)
 	routes.BindRoutes(server)
-	if err := server.Listen(DB_MANAGEMENT_SYSTEM, DB_URL); err != nil {
+	server.SetupStaticFileServer("./"+STATIC_FOLDER, "resources")
+
+	if err := server.SetDBConfig(DB_MANAGEMENT_SYSTEM, DB_URL); err != nil {
+		log.Fatal("The database cannot be configurated")
+	}
+
+	if err := server.Listen(); err != nil {
 		log.Fatal("Server cannot be started")
 	}
 

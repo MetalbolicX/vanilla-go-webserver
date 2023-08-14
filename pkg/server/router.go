@@ -25,7 +25,7 @@ func NewRouter() *router {
 	}
 }
 
-// The FindHandler method of the router is used to
+// The findHandler method of the router is used to
 // find the appropriate handler function for a
 // given HTTP method and URL path. It takes the method
 // and path as parameters and returns the matching
@@ -36,7 +36,7 @@ func NewRouter() *router {
 // to match the path against the stored routes.
 // If a match is found, it returns the corresponding
 // handler function and the boolean values.
-func (rt *router) FindHandler(method, path string) (http.HandlerFunc, bool, bool) {
+func (rt *router) findHandler(method, path string) (http.HandlerFunc, bool, bool) {
 	_, methodExists := rt.rules[method]
 	for route, handlerLogic := range rt.rules[method] {
 		if pathExists, _ := regexp.MatchString("^"+route+"$", path); pathExists {
@@ -54,7 +54,7 @@ func (rt *router) FindHandler(method, path string) (http.HandlerFunc, bool, bool
 // Otherwise, it calls the obtained handlerFunc,
 // passing the response writer and request objects.
 func (rt *router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	handlerLogic, methodExists, pathExists := rt.FindHandler(r.Method, r.URL.Path)
+	handlerLogic, methodExists, pathExists := rt.findHandler(r.Method, r.URL.Path)
 	if !methodExists {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return

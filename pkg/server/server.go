@@ -12,23 +12,20 @@ import (
 
 // The Server struct represents the server configuration.
 // It has fields for the listening port, a router instance
-// and the static file folder path.
 type Server struct {
-	port         string
-	router       *router
-	staticFolder string
+	port   string
+	router *router
 }
 
 // The NewServer function creates a new instance of
-// the Server. It takes the port and static folder path
-// as parameters and initializes the server with
-// the provided values. It also creates a new router
+// the Server. It takes the port as parameters and initializes
+// the server with the provided values.
+// It also creates a new router
 // using the NewRouter function.
-func NewServer(port, staticFolder string) *Server {
+func NewServer(port string) *Server {
 	return &Server{
-		port:         port,
-		router:       NewRouter(),
-		staticFolder: staticFolder,
+		port:   port,
+		router: NewRouter(),
 	}
 }
 
@@ -54,33 +51,34 @@ func (s *Server) Handle(method, path string, handlerLogic http.HandlerFunc) {
 }
 
 // The Listen method starts the server and listens for
-// incoming requests. It takes the database management
-// system (e.g., MySQL, PostgreSQL) and the database URL
-// as parameters. It creates a new repository using
-// the provided parameters and sets it as the
-// implementation for the repository using repository.
-// SetRepository. It registers the router with the
+// incoming requests. I It registers the router with the
 // root path ("/") as the default handler for all requests.
-// It then calls s.setupStaticFileServer to configure
-// the server to serve static files if a static folder
-// is specified. Finally, it starts the server by calling
+// Finally, it starts the server by calling
 // http.ListenAndServe with the specified port
 // and it logs the server's listening port.
-func (s *Server) Listen(dbManagmentSystem, dbUrl string) error {
-
-	repo, err := db.NewRelationalDBRepo(dbManagmentSystem, dbUrl)
-	if err != nil {
-		log.Fatal(err)
-	}
-	repository.SetRepository(repo)
-
+func (s *Server) Listen() error {
 	http.Handle("/", s.router)
-	s.setupStaticFileServer()
-
 	log.Println(s.String())
 	if err := http.ListenAndServe(s.port, nil); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+// The SetDBConfig set the configuration to connect
+// with a database, It takes name the database management
+// system (e.g., MySQL, PostgreSQL) and the database URL or
+// connection string as parameters. It creates a new repository using
+// the provided parameters and sets it as the
+// implementation for the repository using repository.
+// SetRepository.
+func (s *Server) SetDBConfig(dbManagmentSystem, dbUrl string) error {
+	repo, err := db.NewRelationalDBRepo(dbManagmentSystem, dbUrl)
+	if err != nil {
+		return err
+	}
+	repository.SetRepository(repo)
 
 	return nil
 }
@@ -92,12 +90,10 @@ func (s *Server) Listen(dbManagmentSystem, dbUrl string) error {
 // It then registers a handler for the folder path,
 // stripping the folder prefix from the URL path
 // before serving the static files.
-func (s *Server) setupStaticFileServer() {
-	if s.staticFolder != "" {
-		fs := http.FileServer(http.Dir(fmt.Sprintf("./%s", s.staticFolder)))
-		folder := fmt.Sprintf("/%s/", s.staticFolder)
-		http.Handle(folder, http.StripPrefix(folder, fs))
-	}
+func (s *Server) SetupStaticFileServer(staticFolderPath, prefixToStrip string) {
+	fileServer := http.FileServer(http.Dir(staticFolderPath))
+	prefix := fmt.Sprintf("/%s/", prefixToStrip)
+	http.Handle(prefix, http.StripPrefix(prefix, fileServer))
 }
 
 // The function applies the provided middlewares to the
