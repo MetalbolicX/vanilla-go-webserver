@@ -1,1 +1,0 @@
-console.log("Go webserver is alive!!");
